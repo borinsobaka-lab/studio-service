@@ -1,6 +1,6 @@
 databases:
   - name: studio-db
-    plan: starter
+    plan: basic
     databaseName: studio
     user: studio
 
@@ -37,7 +37,7 @@ services:
   - type: web
     name: studio-frontend
     runtime: static
-    plan: free
+    plan: starter
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: build
