@@ -1,6 +1,6 @@
 databases:
   - name: studio-db
-    plan: basic
+    plan: basic-256mb
     databaseName: studio
     user: studio
 
