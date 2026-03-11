@@ -37,7 +37,6 @@ services:
   - type: web
     name: studio-frontend
     runtime: static
-    plan: starter
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: build
