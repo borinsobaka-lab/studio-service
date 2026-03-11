@@ -1,0 +1,50 @@
+databases:
+  - name: studio-db
+    plan: starter
+    databaseName: studio
+    user: studio
+
+services:
+  - type: web
+    name: studio-backend
+    runtime: python
+    plan: starter
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: studio-db
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: AUTH_LOGIN
+        value: admin
+      - key: AUTH_PASSWORD
+        sync: false
+      - key: UPLOAD_DIR
+        value: /data/uploads
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+    disk:
+      name: studio-uploads
+      mountPath: /data/uploads
+      sizeGB: 1
+
+  - type: web
+    name: studio-frontend
+    runtime: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_API_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
